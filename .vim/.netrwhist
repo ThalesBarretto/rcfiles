@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =5
+let g:netrw_dirhist_5='/home/thales/repo/trilhante/trilhante-master'
+let g:netrw_dirhist_4='/home/thales/repo/trilhante/trilhante-master/database/migrations'
+let g:netrw_dirhist_3='/home/thales/repo/trilhante/trilhante-master/database'
+let g:netrw_dirhist_2='/home/thales/repo/trilhante/trilhante-master/routes'
+let g:netrw_dirhist_1='/home/thales/repo/trilhante/trilhante-master/.github/workflows'
+let g:netrw_dirhist_0='/home/thales/repo/trilhante/trilhante-master/.github'
+let g:netrw_dirhist_9='/home/thales/repo/trilhante/trilhante-master/config'
+let g:netrw_dirhist_8='/home/thales/.ssh'
+let g:netrw_dirhist_7='/home/thales/repo/trilhante/trilhante-master'
+let g:netrw_dirhist_6='/home/thales/repo/learn/laravel-book/first/app'
