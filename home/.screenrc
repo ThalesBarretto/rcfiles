@@ -1,0 +1,10 @@
+truecolor on
+hardstatus off
+startup_message off
+vbell off
+term xterm-kitty
+setenv COLORTERM truecolor
+termcapinfo xterm*|rxvt*|kterm*|Eterm* ti@:te@
+altscreen on
+deflogin off
+password none
