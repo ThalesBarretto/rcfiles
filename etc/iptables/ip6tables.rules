@@ -1,0 +1,8 @@
+# Empty iptables rule file
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -p ipv6-icmp -j ACCEPT
+-A OUTPUT -p ipv6-icmp -j ACCEPT
+COMMIT

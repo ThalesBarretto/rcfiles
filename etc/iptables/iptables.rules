@@ -1,0 +1,51 @@
+# Internet sharing for TG
+*nat
+# private wifi TG
+-A POSTROUTING -s 192.168.3.0/24 ! -d 192.168.3.0/24 -j MASQUERADE
+COMMIT
+*filter
+:INPUT DROP
+:FORWARD DROP
+:OUTPUT ACCEPT
+:TCP - [0:0]
+:UDP - [0:0]
+:IGMP - [0:0]
+:ICMP - [0:0]
+# private wifi TG
+-A INPUT -s 192.168.0.0/16 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+-A TCP   -s 192.168.0.0/16 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+-A UDP	 -s 192.168.0.0/16 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+-A ICMP	 -s 192.168.0.0/16 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+# VM input dummy for routing
+-A INPUT -i dum0 -j ACCEPT
+# dlna
+-A TCP -p tcp --dport 8200 -m comment --comment "minidlna" -j ACCEPT
+-A UDP	-d 239.255.255.250/32	-p udp --dport 1900 -m comment --comment "upnp dlna" -j ACCEPT
+-A IGMP	-d 224.0.0.1/32		-m comment --comment "igmp membership queries, upnp/dlna" -j ACCEPT
+-A IGMP	-d 239.0.0.0/8		-m comment --comment "igmp multicast, upnp/dlna" -j ACCEPT
+# Brother printer
+-A TCP	-s 192.168.15.89	-m comment --comment "Brother printer TCP" -j ACCEPT 
+-A UDP	-s 192.168.15.89	-m comment --comment "Brother printer UDP" -j ACCEPT 
+# samba shares for VMS
+-A UDP -p udp --dport 137:138	-s 192.168.100.0/24 -m state --state NEW,ESTABLISHED -m comment --comment "SMB shares" -j ACCEPT
+-A TCP -p tcp --dport 139	-s 192.168.100.0/24 -m state --state NEW,ESTABLISHED -m comment --comment "SMB shares" -j ACCEPT
+-A TCP -p tcp --dport 445	-s 192.168.100.0/24 -m state --state NEW,ESTABLISHED -m comment --comment "SMB shares" -j ACCEPT
+# samba shares for Windows PC
+-A UDP -p udp --dport 137:138	-s 192.168.15.235 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A TCP -p tcp --dport 139	-s 192.168.15.235 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A TCP -p tcp --dport 445	-s 192.168.15.235 -m state --state NEW,ESTABLISHED -j ACCEPT
+# IDK
+-A UDP -p udp --dport 1714:1764 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A TCP -p tcp --dport 1714:1764 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A OUTPUT -p udp --sport 1714:1764 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A OUTPUT -p tcp --sport 1714:1764 -m state --state NEW,ESTABLISHED -j ACCEPT
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT 
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT 
+-A INPUT -i lo -j ACCEPT 
+-A INPUT -p icmp -j ACCEPT 
+-A INPUT -p udp -m conntrack --ctstate NEW -j UDP
+-A INPUT -p tcp --syn -m conntrack --ctstate NEW -j TCP
+-A INPUT -p tcp -j REJECT --reject-with tcp-reset 
+-A INPUT -p udp -j REJECT --reject-with icmp-port-unreachable 
+-A INPUT -j REJECT --reject-with icmp-proto-unreachable 
+COMMIT
